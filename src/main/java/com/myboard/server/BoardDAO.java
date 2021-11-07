@@ -1,9 +1,6 @@
 package com.myboard.server;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,15 +73,49 @@ public class BoardDAO {
         }
         return result;
     }
-    public static List<BoardVO> selBoardList() {
+    public static List<BoardVO> selBoardList(String[] search) {
         List<BoardVO> list = new ArrayList();
         Connection con = null;
         PreparedStatement pre = null;
         ResultSet rs = null;
         String sql = " SELECT * FROM t_board ";
+        String sql1 = " SELECT * FROM t_board WHERE title = ? ";
+        String sql2 = " SELECT * FROM t_board WHERE ctnt = ? ";
+        String sql3 = " SELECT * FROM t_board WHERE writer = ? ";
         try {
             con = DButils.getCon();
-            pre = con.prepareStatement(sql);
+            /*
+            switch (search[0]){
+                case "title" :
+                    pre = con.prepareStatement(sql1);
+                    pre.setString(1,search[1]);
+                    break;
+                case "writer":
+                    pre = con.prepareStatement(sql3);
+                    pre.setString(1,search[1]);
+                    break;
+                case "context":
+                    pre = con.prepareStatement(sql2);
+                    pre.setString(1,search[1]);
+                    break;
+                default:
+                    pre = con.prepareStatement(sql);
+            }
+
+             */
+            if(search[0]==null){
+                pre = con.prepareStatement(sql);
+            }else if("title".equals(search[0])){
+                pre = con.prepareStatement(sql1);
+                pre.setString(1,search[1]);
+            }else if("writer".equals(search[0])){
+                pre = con.prepareStatement(sql3);
+                pre.setString(1,search[1]);
+            }else if("context".equals(search[0])){
+                pre = con.prepareStatement(sql2);
+                pre.setString(1,search[1]);
+            }
+
             rs = pre.executeQuery();
             while (rs.next()){
                 BoardVO vo = new BoardVO();

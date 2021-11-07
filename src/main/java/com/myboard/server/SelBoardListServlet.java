@@ -17,8 +17,8 @@ public class SelBoardListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         res.setContentType("text/plain; charset=UTF-8");
         res.setCharacterEncoding("UTF-8");
-
-        List<BoardVO> list = BoardDAO.selBoardList();
+        String[] search = { req.getParameter("search"),req.getParameter("value")};
+        List<BoardVO> list = BoardDAO.selBoardList(search);
         PrintWriter out = res.getWriter();
         out.println(new Gson().toJson(list));
     }
