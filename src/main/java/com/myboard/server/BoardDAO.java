@@ -12,13 +12,20 @@ public class BoardDAO {
         String sql = " UPDATE t_board "+
                 " SET title=?, writer =? , ctnt = ? "+
                 " where iboard = ? ";
+        String sql1 = "UPDATE t_board SET heart = ? where iboard = ? ";
         try {
             con = DButils.getCon();
-            pre = con.prepareStatement(sql);
-            pre.setString(1,param.getTitle());
-            pre.setString(2,param.getWriter());
-            pre.setString(3,param.getCtnt());
-            pre.setInt(4,param.getIboard());
+            if (param.getTitle() == null) {
+                pre = con.prepareStatement(sql1);
+                pre.setInt(1,param.getHeart());
+                pre.setInt(2,param.getIboard());
+            }else {
+                pre = con.prepareStatement(sql);
+                pre.setString(1, param.getTitle());
+                pre.setString(2, param.getWriter());
+                pre.setString(3, param.getCtnt());
+                pre.setInt(4, param.getIboard());
+            }
             result = pre.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,6 +131,7 @@ public class BoardDAO {
                 vo.setCtnt(rs.getString("ctnt"));
                 vo.setWriter(rs.getString("writer"));
                 vo.setRdt(rs.getString("rdt"));
+                vo.setHeart(rs.getInt("heart"));
                 list.add(vo);
             }
         } catch (SQLException e) {
@@ -153,6 +161,7 @@ public class BoardDAO {
                 ivo.setCtnt(rs.getString("ctnt"));
                 ivo.setWriter(rs.getString("writer"));
                 ivo.setRdt(rs.getString("rdt"));
+                ivo.setHeart(rs.getInt("heart"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

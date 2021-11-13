@@ -7,6 +7,16 @@ public class BoardVO  {
     private String writer;
     private String rdt;
 
+    public int getHeart() {
+        return heart;
+    }
+
+    public void setHeart(int heart) {
+        this.heart = heart;
+    }
+
+    private int heart;
+
     public int getIboard() {
         return iboard;
     }
